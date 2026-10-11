@@ -18,7 +18,7 @@ jobs:
         run: |
           pyinstaller --noconsole --onefile card_tracker.py
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: card_tracker-exe
           path: dist/card_tracker.exe
