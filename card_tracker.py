@@ -9,12 +9,20 @@
 
 import json
 import os
+import sys
 import tkinter as tk
 from tkinter import ttk, messagebox
 from datetime import date
 
-# 저장 파일 위치 (스크립트와 같은 폴터)
-DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "card_records.json")
+# PyInstaller로 빌드된 .exe 환경에서도 실행 파일이 있는 위치에 안전하게 저장되도록 경로 설정
+if getattr(sys, 'frozen', False):
+    # .exe 파일로 실행된 경우
+    base_path = os.path.dirname(sys.executable)
+else:
+    # 파이썬 스크립트로 직접 실행된 경우
+    base_path = os.path.dirname(os.path.abspath(__file__))
+
+DATA_FILE = os.path.join(base_path, "card_records.json")
 
 
 def load_records():
@@ -28,8 +36,11 @@ def load_records():
 
 
 def save_records(records):
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(records, f, ensure_ascii=False, indent=2)
+    try:
+        with open(DATA_FILE, "w", encoding="utf-8") as f:
+            json.dump(records, f, ensure_ascii=False, indent=2)
+    except OSError:
+        pass
 
 
 class CardTrackerApp:
